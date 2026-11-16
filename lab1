@@ -1,0 +1,113 @@
+//Ques1: Given an array of +ve and -ve, rearrange such that first positive and negative in alternate pattern.
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the array element number :");
+    scanf("%d",&n);
+    int arr[n];
+    for(int i=0;i<n;i++){
+        printf("enter %d element :",i+1);
+        scanf("%d",&arr[i]);
+    }
+    int arr_pos[n/2],arr_neg[n/2];
+    int ind_pos=0,ind_neg=0;
+    for(int i=0;i<n;i++){
+        if(arr[i]>=0){
+            arr_pos[ind_pos]=arr[i];
+            ind_pos++;
+        }
+        else{
+            arr_neg[ind_neg]=arr[i];
+            ind_neg++;
+        }
+    }
+    ind_pos=0;ind_neg=0;
+    for(int i=0;i<n;i++){
+        if(i%2==0){
+            arr[i]=arr_pos[ind_pos];
+            ind_pos++;
+        }
+        else{
+            arr[i]=arr_neg[ind_neg];
+            ind_neg++;
+        }
+    }
+    for(int i=0;i<n;i++){
+        printf("%d ",arr[i]);
+    }
+}
+
+
+//Ques2:Write a program to print all subsets of array whose sums equal to a given number.
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the array element number :");
+    scanf("%d",&n);
+    int arr[n];
+    for(int i=0;i<n;i++){
+        printf("enter %d element :",i+1);
+        scanf("%d",&arr[i]);
+    }
+    int num;
+    printf("enter the finding number: ");
+    scanf("%d",&num);
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if((arr[i]+arr[j])==num)
+                printf("(%d,%d)",arr[i],arr[j]);
+        }
+    }
+}
+
+/*Ques3: Write a program to input array of structures for an employee and store it in a file 
+one structure at a time also, read the salary input of every employee and update it in the 
+file using the following rule..." (followed by salary increment percentages for different ranges)*/
+#include<stdio.h>
+struct emp_data{
+    char name[20];
+    int sal_emp;
+    int emp_id;
+    char dep_nm[20];
+};
+int main(){
+    struct emp_data emp[3];
+    for(int i=0;i<3;i++){
+        printf("enter emp %d data : ",i+1);
+        scanf("%s",&emp[i].name);
+        scanf("%d",&emp[i].sal_emp);
+        scanf("%d",&emp[i].emp_id);
+        scanf("%s",&emp[i].dep_nm);
+    }
+    FILE *f;
+    f=fopen("employee.dat","wb");
+    for(int i=0;i<3;i++){
+        fwrite(&emp[i],sizeof(struct emp_data),1,f);
+    }
+    fclose(f);
+    f=fopen("employee.dat","rb");
+    for(int i=0;i<3;i++){
+        fread(&emp[i],sizeof(struct emp_data),1,f);
+        if(emp[i].sal_emp>50000){
+            emp[i].sal_emp+=0.05*emp[i].sal_emp+emp[i].sal_emp;
+        }
+        else if(emp[i].sal_emp > 20000 && emp[i].sal_emp < 50000){
+            emp[i].sal_emp+=0.1*emp[i].sal_emp+emp[i].sal_emp;
+        }
+        else{
+            emp[i].sal_emp+=0.15*emp[i].sal_emp+emp[i].sal_emp;
+        }
+    }
+    fclose(f);
+    f=fopen("employee.dat","wb");
+    for(int i=0;i<3;i++){
+        fwrite(&emp[i],sizeof(struct emp_data),1,f);
+    }
+    fclose(f);
+    f=fopen("employee.dat","rb");
+    for(int i=0;i<3;i++){
+        fread(&emp[i],sizeof(struct emp_data),1,f);
+        printf("%s %d %d %s\n",emp[i].name,emp[i].sal_emp,emp[i].emp_id,emp[i].dep_nm);
+    }
+    fclose(f);
+}
