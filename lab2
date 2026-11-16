@@ -1,0 +1,168 @@
+//Ques1: Write a program to insert or delete an element from a array.
+
+#include<stdio.h>
+int main(){
+    int arr[]={1,2,3,4,5,6};
+    int insert_num;
+    int insert_index;
+    int delete_num;
+    int flag=0;
+    printf("enter delete no. :");
+    scanf("%d",&delete_num);
+    printf("enter insert number :");
+    scanf("%d",&insert_num);
+    printf("enter insert no. :");
+    scanf("%d",&insert_index);
+    for(int i=0;i<6;i++){
+        if(arr[i]==delete_num || flag){
+            arr[i]=arr[i+1];
+            flag=1;
+        }
+    }
+    int element=insert_num;
+    for(int i=0;i<6;i++){
+        element=arr[i];
+        if(i==insert_index){
+            arr[i]=insert_num;
+        }
+        else if(i>insert_index){
+            arr[i]=element;
+        }
+    }
+    for(int i=0;i<6;i++){
+        printf("%d ",arr[i]);
+    }
+/*Ques 2: Write a program to accept a matrix of size m \times n and convert it into a sparse matrix 
+representation using row-column-value format.*/
+
+#include<stdio.h>
+int main(){
+    int n,m;
+    printf("enter the row in array :");
+    scanf("%d",&n);
+    printf("enter the column in array :");
+    scanf("%d",&m);
+    int arr[n][m];
+    int new_arr1[10];
+    int new_arr2[10];
+    int new_arr3[10];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            scanf("%d",&arr[i][j]);
+        }
+    }
+    // check the matrix;
+    int index=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(arr[i][j]!=0){
+                new_arr1[index]=i;
+                new_arr2[index]=j;
+                new_arr3[index]=arr[i][j];
+                index++;
+            }
+        }
+    }
+    for(int i=0;i<index;i++){
+        printf("%d %d %d\n",new_arr1[i],new_arr2[i],new_arr3[i]);
+    }
+}
+
+/*Ques 3: Write a program to find the second largest and second smallest number from an array 
+without sorting (the array may have duplicate elements)*/
+
+#include<stdio.h>
+int main(){
+    int arr[]={5,8,2,3,10,9,2,8,11};
+    int l_num, sl_num;
+    int sm_num, sml_num;
+    if(arr[0]>arr[1]){
+        l_num=arr[0];
+        sl_num=arr[1];
+        sml_num=arr[0];
+        sm_num=arr[1];
+    }
+    else{
+        l_num=arr[1];
+        sl_num=arr[0];
+        sml_num=arr[1];
+        sm_num=arr[0];
+    }
+    for(int i=2;i<9;i++){
+        if(l_num<arr[i]){
+            sl_num=l_num;
+            l_num=arr[i];
+        }
+        else if(sl_num<arr[i]) sl_num=arr[i];
+        
+        if(sm_num>arr[i]){
+            sml_num=sm_num;
+            sm_num=arr[i];
+        }
+        else if(sml_num>arr[i]) sml_num=arr[i];
+    }
+    printf("second largest number : %d\n",sl_num);
+    printf("second smallest number : %d",sml_num);
+}
+
+/*Ques 4: Rotate an array to the right by k positions without using an extra array, 
+where k can be greater than the array length n.*/
+
+#include<stdio.h>
+void rev_arr(int a[],int n,int start_num){
+    for(int i=start_num;i<(n+start_num)/2;i++){
+        int temp=a[i];
+        a[i]=a[(n+start_num)-(i+1)];
+        a[(n+start_num)-(i+1)]=temp;
+    }
+}
+int main(){
+    int arr[]={1,2,3,4,5,6,7,8};
+    int k;
+    printf("enter the k value :");
+    scanf("%d",&k);
+    k=k%8;
+    rev_arr(arr,8,0);
+    rev_arr(arr,8-k,0);
+    rev_arr(arr,8,8-k);
+    for(int i=0;i<8;i++){
+        printf("%d",arr[i]);
+    }
+}
+
+/*Ques 5:Implement insertion sort and bubble sort in a single program and measure the time 
+taken by both programs for different input sizes.*/
+
+#include<stdio.h>
+int main(){
+    // Bubble Sort
+    int arr[]={5,8,2,3,10,9,2,8,11};
+    for(int i=0;i<9;i++){
+        for(int j=i+1;j<9;j++){
+            if(arr[i]>arr[j]){
+                int temp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=temp;
+            }
+        }
+    }
+    for(int i=0;i<9;i++){
+        printf("%d ",arr[i]);
+    }
+    printf("\n");
+
+    // Insertion Sort
+    int arr1[]={5,8,2,3,10,9,2,8,11};
+    for(int i=0;i<9;i++){
+        int key=arr1[i];
+        int j=i-1;
+        while(j>=0 && arr1[j]>key){
+            arr1[j+1]=arr1[j];
+            j--;
+        }
+        arr1[j+1]=key;
+    }
+    for(int i=0;i<9;i++){
+        printf("%d ",arr1[i]);
+    }
+}
