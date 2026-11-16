@@ -1,0 +1,127 @@
+//Ques 1: Smallest Missing Positive Integer
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the no. of elemnt of array :");
+    scanf("%d",&n);
+    int arr[n];
+    printf("enter the element of the array :");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    int sl=0;
+    int flag=1;
+    for(int i=0;i<n;i++){
+        if(arr[i]>0){
+            if(sl>arr[i]||flag){
+                sl=arr[i];
+                flag=0;
+            }
+        }
+    }
+    printf("%d ",sl);
+}
+
+//Ques 2: Equilibrium Index
+
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the no. of elemnt of array :");
+    scanf("%d",&n);
+    int arr[n];
+    printf("enter the element of the array :");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    int lsum=0;
+    for(int i=0;i<n-1;i++){
+        int rsum=0;
+        lsum+=arr[i];
+        for(int j=(n-1);j>(i+1);j--){
+            rsum+=arr[j];
+        }
+        if(lsum==rsum){
+            printf("equ index :%d",i+1);
+        }
+    }
+}
+
+//Ques 3: Find the duplicate number
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the no. of elemnt of array :");
+    scanf("%d",&n);
+    int arr[n];
+    printf("enter the element of the array :");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    int found=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(j!=i && arr[i]==arr[j]){
+                found=1;
+            }
+        }
+        if(found){
+            printf("Duplicate no. is %d",arr[i]);
+            break;
+        }
+    }
+}
+
+//Ques 4: Maximum XOR Pair
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the no. of elemnt of array :");
+    scanf("%d",&n);
+    int arr[n];
+    printf("enter the element of the array :");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    int max_xor=0;
+    int e1,e2;
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(max_xor<(arr[i]^arr[j])){
+                max_xor=(arr[i]^arr[j]);
+                e1=arr[i];
+                e2=arr[j];
+            }
+        }
+    }
+    printf("pair is %d and %d",e1,e2);
+}
+
+//Ques 5: Rearranging Positive and Negative Number
+#include<stdio.h>
+int main(){
+    int n;
+    printf("enter the no. of elemnt of array :");
+    scanf("%d",&n);
+    int arr[n];
+    printf("enter the element of the array :");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    int l=0;
+    int m=n-1;
+    for(int k=0;k<n;k++){
+        int i=k;
+        int j=i-1;
+        while(arr[j]<0 && k!=-1){
+            int temp=arr[j];
+            arr[j]=arr[i];
+            arr[i]=temp;
+            i=j;
+            j--;
+        }
+    }
+    for(int i=0;i<n;i++){
+        printf("%d ",arr[i]);
+    }
+}
