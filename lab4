@@ -1,0 +1,184 @@
+//Ques 1: Insertion at end ,front and at any index in linked list
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node* link;
+};
+struct node* insertion(struct node *head,int n){
+    struct node *pre=NULL;
+    pre=head;
+    while(n!=0){
+        struct node *temp=(struct node*)malloc(sizeof(struct node));
+        printf("enter the data :");
+        int data;
+        if(head==NULL){
+            scanf("%d",&temp->data);
+            head=temp;
+        }
+        else{
+            scanf("%d",&temp->data);
+            pre->link=temp;
+        }
+        pre=temp;
+        temp->link=NULL;
+        n--;
+    }
+    return head;
+}
+void insert_front(struct node **head,int data){
+    struct node *temp=(struct node*)malloc(sizeof(struct node));
+    temp->data=data;
+    temp->link=(*head);
+    *head=temp;
+}
+void insert_end(struct node *head,int data){
+    struct node *temp=head;
+    while(temp->link!=NULL){
+        temp=temp->link;
+    }
+    struct node *newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    temp->link=newnode;
+    newnode->link=NULL;
+}
+void insert_mid(struct node *head,int data,int pos){
+    struct node *temp=head;
+    if(pos==1){
+        insert_front(&head,data);
+        return;
+    }
+    while(pos!=2){
+        temp=temp->link;
+        pos--;
+    }
+    struct node *newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->link=temp->link;
+    temp->link=newnode;
+}
+void print(struct node *head){
+    struct node *temp=head;
+    while(temp!=NULL){
+        printf("%d %p\n",temp->data,temp->link);
+        temp=temp->link;
+    }
+}
+int main(){
+    struct node *head=NULL;
+    int n;
+    printf("enter the no. u want to insert: ");
+    scanf("%d",&n);
+    printf("before insert newnode\n");
+    head=insertion(head,n);
+
+    printf("insert at the front position\n");
+    int n1;
+    printf("enter the data:");
+    scanf("%d",&n1);
+    insert_front(&head,n1);
+    print(head);
+    printf("insert at the end position\n");
+    int n2;
+    printf("enter the data:");
+    scanf("%d",&n2);
+    insert_end(head,n2);
+    print(head);
+    printf("insert at the any index position\n");
+    int n3,pos;
+    printf("enter the data and pos:");
+    scanf("%d %d",&n3,&pos);
+    insert_mid(head,n3,pos);
+    print(head);
+    return 0;
+}
+
+//Ques 2: Deletion at end , front and at any index
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node* link;
+};
+struct node* insertion(struct node *head,int n){
+    struct node *pre=NULL;
+    pre=head;
+    while(n!=0){
+        struct node *temp=(struct node*)malloc(sizeof(struct node));
+        printf("enter the data :");
+        int data;
+        if(head==NULL){
+            scanf("%d",&temp->data);
+            head=temp;
+        }
+        else{
+            scanf("%d",&temp->data);
+            pre->link=temp;
+        }
+        pre=temp;
+        temp->link=NULL;
+        n--;
+    }
+    return head;
+}
+void del_front(struct node **head){
+    struct node *temp=*head;
+    *head=temp->link;
+    free(temp);
+}
+void del_end(struct node *head){
+    struct node *temp=head;
+    while(temp->link->link!=NULL){
+        temp=temp->link;
+    }
+    free(temp->link);
+    temp->link=NULL;
+}
+void del_mid(struct node **head,int pos){
+    if(*head==NULL)return;
+    if(pos==1){
+        del_front(head);
+        return;
+    }
+    struct node *temp=*head;
+    while(pos!=2){
+        temp=temp->link;
+        pos--;
+    }
+    struct node *del=temp->link;
+    temp->link=del->link;
+    free(del);
+}
+void print(struct node *head){
+    struct node *temp=head;
+    while(temp!=NULL){
+        printf("%d %p\n",temp->data,temp->link);
+        temp=temp->link;
+    }
+}
+int main(){
+    struct node *head=NULL;
+    int n;
+    printf("enter the data u want to insert: ");
+    scanf("%d",&n);
+    printf("before delete node\n");
+    head=insertion(head,n);
+
+    printf("delete in front position\n");
+    del_front(&head);
+    print(head);
+
+    printf("delete in end position\n");
+    del_end(head);
+    print(head);
+
+    printf("delete in any position\n");
+    int num;
+    printf("enter position at which u want deletion\n");
+    scanf("%d",&num);
+    del_mid(&head,num);
+    print(head);
+    return 0;
+}
