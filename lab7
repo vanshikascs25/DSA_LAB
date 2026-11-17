@@ -1,0 +1,283 @@
+/*Ques 1:Given a string containing just the characters ‘(’ and ‘)’, return the length 
+of the longest valid (wellformed) parentheses substring.*/
+
+#include <stdio.h>
+
+int main(){
+    int n;
+    printf("Enter number of parentheses: ");
+    scanf("%d", &n);
+    char par[n + 1];
+    printf("Enter parentheses:\n");
+    for(int i = 0; i < n; i++) scanf(" %c", &par[i]);
+    par[n] = '\0';
+    int stack[n];
+    int match[n];
+    for(int i = 0; i < n; i++) match[i] = 0;
+    int top = -1;
+    for(int i = 0; i < n; i++){
+        if(par[i] == '('){
+            stack[++top] = i;
+        }
+        else if(par[i] == ')'){
+            if(top != -1){
+                int open_index = stack[top--];
+                match[open_index] = 1;
+                match[i] = 1;
+            }
+        }
+    }
+    int count = 0, max_count = 0;
+    printf("Invalid parentheses: ");
+    for(int i = 0; i < n; i++){
+        if(match[i] == 1){
+            count++;
+            if(count > max_count)
+                max_count = count;
+        }
+        else{
+            count = 0;
+            printf("%c", par[i]);
+        }
+    }
+    printf("\nLongest valid sequence length = %d\n", max_count);
+    return 0;
+}
+
+
+/*Ques 2: Implement the algorithm of converting Infix to Postfix expression. You need to 
+consider ‘(’, ‘)’, ‘+’, ‘-’, ‘/’, ‘*’, ‘%’, and ^ characters in your expression.*/
+
+#include <stdio.h>
+#include <ctype.h>
+
+int precedence(char ch){
+    if(ch == '^'){
+        return 3;
+    }
+    else if(ch == '*' || ch == '/' || ch == '%'){
+        return 2;
+    }
+    else if(ch == '+' || ch == '-'){
+        return 1;
+    }
+    return 0;
+}
+int main(){
+    char infix[100];
+    char postfix[100];
+    char stack[100];
+    int top = -1;
+    int k = 0;
+    printf("Enter infix expression: ");
+    scanf("%s", infix);
+    for(int i = 0; infix[i] != '\0'; i++){
+        if(isalnum(infix[i])){
+            postfix[k++] = infix[i];
+        }
+        else if(infix[i] == '('){
+            stack[++top] = '(';
+        }
+        else if(infix[i] == ')'){
+            while(top != -1 && stack[top] != '('){
+                postfix[k++] = stack[top--];
+            }
+            top--;
+        }
+        else{
+            while(top != -1 && stack[top] != '(' && (precedence(stack[top]) >
+precedence(infix[i]) || (precedence(stack[top]) == precedence(infix[i]) &&infix[i] !=
+'^'))){
+                postfix[k++] = stack[top--];
+            }
+            stack[++top] = infix[i];
+        }
+    }
+    while(top != -1){
+        postfix[k++] = stack[top--];
+    }
+    postfix[k] = '\0';
+    printf("Postfix expression: %s", postfix);
+    return 0;
+}
+
+/*Ques 3: Given the array stress and the integer threshold K, find the maximum number of 
+consecutive passengers the conductor can board in a single group without starting an argument.*/
+
+#include <stdio.h>
+
+int main(){
+    int arr[100];
+    int n,k;
+    printf("Enter number of elements: ");
+    scanf("%d",&n);
+    printf("Enter elements: ");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    printf("Enter K: ");
+    scanf("%d",&k);
+    int maxlen=0;
+    for(int i=0;i<n;i++){
+        int max=arr[i];
+        int min=arr[i];
+        for(int j=i;j<n;j++){
+            if(arr[j]>max){
+                max=arr[j];
+            }
+
+            if(arr[j]<min){
+                min=arr[j];
+            }
+
+            if(max-min<=k){
+                int len=j-i+1;
+
+                if(len>maxlen){
+                    maxlen=len;
+                }
+            }
+            else{
+                break;
+            }
+        }
+    }
+    printf("Maximum length = %d",maxlen);
+    return 0;
+}
+
+//Ques 4: Implement Queue using Array.
+
+
+#include <stdio.h>
+int main(){
+    int queue[100];
+    int front=-1;
+    int rear=-1;
+    int choice,data;
+    do{
+        printf("\n1.Enqueue");
+        printf("\n2.Dequeue");
+        printf("\n3.Display");
+        printf("\n4.Exit");
+
+        printf("\nEnter choice: ");
+        scanf("%d",&choice);
+
+        if(choice==1){
+            if(rear==99){
+                printf("Queue Full");
+            }
+            else{
+                printf("Enter data: ");
+                scanf("%d",&data);
+
+                if(front==-1){
+                    front=0;
+                }
+                rear++;
+                queue[rear]=data;
+            }
+        }
+        else if(choice==2){
+            if(front==-1){
+                printf("Queue Empty");
+            }
+            else{
+                printf("Deleted Element = %d",queue[front]);
+                front++;
+                if(front>rear){
+                    front=-1;
+                    rear=-1;
+                }
+            }
+        }
+        else if(choice==3){
+            if(front==-1){
+                    printf("Queue Empty");
+            }
+            else{
+                printf("Queue: ");
+                for(int i=front;i<=rear;i++){
+                    printf("%d ",queue[i]);
+                }
+            }
+        }
+
+    }while(choice!=4);
+
+    return 0;
+}
+
+
+//Ques 5:Implementing Queue using Linked List.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node *next;
+};
+
+int main(){
+    struct node *front=NULL;
+    struct node *rear=NULL;
+    int choice,data;
+    do{
+        printf("\n1.Enqueue");
+        printf("\n2.Dequeue");
+        printf("\n3.Display");
+        printf("\n4.Exit");
+        printf("\nEnter choice: ");
+        scanf("%d",&choice);
+        if(choice==1){
+            struct node *newnode;
+            newnode=(struct node*)malloc(sizeof(struct node));
+            printf("Enter data: ");
+            scanf("%d",&data);
+            newnode->data=data;
+            newnode->next=NULL;
+            if(front==NULL){
+                front=newnode;
+                rear=newnode;
+            }
+            else{
+                rear->next=newnode;
+                rear=newnode;
+            }
+        }
+        else if(choice==2){
+            if(front==NULL){
+                printf("Queue Empty");
+            }
+            else{
+                struct node *temp=front;
+                printf("Deleted Element = %d",front->data);
+                front=front->next;
+                if(front==NULL){
+                    rear=NULL;
+                }
+                free(temp);
+            }
+        }
+
+        else if(choice==3){
+            if(front==NULL){
+                printf("Queue Empty");
+            }
+            else{
+                struct node *temp=front;
+                printf("Queue: ");
+                while(temp!=NULL){
+                    printf("%d ",temp->data);
+                    temp=temp->next;
+                }
+            }
+        }
+
+    }while(choice!=4);
+
+    return 0;
+}
