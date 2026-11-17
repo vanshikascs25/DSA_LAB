@@ -1,0 +1,309 @@
+//Ques 1:Write a program to reverse a doubly linked list.
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node* next;
+};
+struct node* insert_node(struct node* head,int data){
+    struct node* new_n=(struct node*)malloc(sizeof(struct node));
+    if(head==NULL){
+        new_n->data=data;
+        new_n->next=new_n;
+        head=new_n;
+    }
+    else{
+        struct node* temp=head;
+        while(temp->next!=head){
+            temp=temp->next;
+        }
+        new_n->data=data;
+        new_n->next=head;
+        temp->next=new_n;
+    }
+    return head;
+}
+
+struct node* rev_lst(struct node* head) {
+    struct node* prev = NULL;
+    struct node* ptr = head;
+    struct node* next = NULL;
+    do {
+        next = ptr->next;
+        ptr->next = prev;
+        prev = ptr;
+        ptr= next;
+    }while(ptr!=head);
+    head = prev;
+    struct node* temp=head;
+    while(temp->next!=NULL){
+        temp=temp->next;
+    }
+    temp->next=head;
+    return head;
+}
+
+void print_value(struct node *head){
+    struct node* temp=head;
+    do{
+        printf("%d ->",temp->data);
+        temp=temp->next;
+    }while(temp!=head);
+    printf("....");
+}
+int main(){
+    struct node* head=NULL;
+    head=insert_node(head,40);
+    head=insert_node(head,50);
+    head=insert_node(head,60);
+    head=insert_node(head,70);
+    print_value(head);
+
+    printf("\n\n\n");
+    head=rev_lst(head);
+    print_value(head);
+}
+
+//Ques 2: Write a program for delete in a circular linked list
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node *link;
+};
+struct node* insert_node(struct node* head,int data){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    if(head==NULL){
+        head=newnode;
+        newnode->data=data;
+        newnode->link=head;
+    }
+    else{
+        struct node* ptr=head;
+        while(ptr->link!=head){
+            ptr=ptr->link;
+        }
+        newnode->data=data;
+        ptr->link=newnode;
+        newnode->link=head;
+    }
+    return head;
+}
+
+struct node* del_front(struct node* head){
+    struct node* ptr=head;
+    while(ptr->link !=head){
+        ptr=ptr->link;
+    }
+    ptr->link=head->link;
+    free(head);
+    head=ptr->link;
+    return head;
+}
+
+struct node* del_end(struct node* head){
+    struct node* ptr=head;
+    while(ptr->link->link !=head){
+        ptr=ptr->link;
+    }
+    free(ptr->link);
+    ptr->link=head;
+    return head;
+}
+struct node* del_index(struct node*head,int pos){
+    struct node* ptr=head;
+    for(int i=1;i<(pos-1);i++){
+        ptr=ptr->link;
+    }
+    if(pos==1) return del_front(head);
+    struct node* temp=ptr->link;
+    ptr->link=temp->link;
+    free(temp);
+    return head;
+}
+void pr_value(struct node *head){
+    struct node* ptr=head;
+    do{
+        printf("%d-> ",ptr->data);
+        ptr=ptr->link;
+    }while(ptr!=head);
+    printf("head");
+}
+int main(){
+    struct node * head=NULL;
+    head=insert_node(head,6);
+    head=insert_node(head,7);
+    head=insert_node(head,8);
+    head=insert_node(head,9);
+    head=insert_node(head,10);
+    head=insert_node(head,11);
+    pr_value(head);
+    printf("\n\n");
+
+    //del front
+    head=del_front(head);
+    pr_value(head);
+    printf("\n\n");
+
+    //del end
+    head=del_end(head);
+    pr_value(head);
+    printf("\n\n");
+
+    //del at any index
+    int pos;
+    printf("enter the index u want to insert :");
+    scanf("%d",&pos);
+    head=del_index(head,pos);
+    pr_value(head);
+    printf("\n\n");
+
+}
+
+
+//Ques 3:Write a program to implement stack using array.
+
+
+#include<stdio.h>
+void push(int stack[],int n,int num){
+    int index=0;
+    while(index!=num){
+        if(index==n){
+            printf("OVERFLOW\n");
+            break;
+        }
+        else{
+            printf("enter the element: ");
+            scanf("%d",&stack[index]);
+            index++;
+        }
+    }
+}
+
+void pop(int *num,int stack[],int n){
+    int del_n;
+    printf("enter number of elemnt u want to delete: ");
+    scanf("%d",&del_n);
+    int dn=(*num);
+    while(del_n!=0){
+        if(del_n>=dn){
+            printf("UNDERFLOW\n");
+            (*num)=0;
+            break;
+        }
+        else{
+            (*num)--;
+        }
+        del_n--;
+    }
+}
+
+void print(int num,int stack[],int n){
+    if(num==0) printf("Stack is empty");
+    for(int i=0;i<(num);i++){
+        printf("%d",stack[i]);
+    }
+}
+
+int main(){
+    int n;
+    printf("enter the Size of stack : ");
+    scanf("%d",&n);
+    int stack[n];
+    int num;
+    printf("enter the number of element : ");
+    scanf("%d",&num);
+    push(stack,n,num);
+    pop(&num,stack,n);
+    print(num,stack,n);
+    return 0;
+}
+
+
+//Ques 4:Write a program to implement stack using linked list.
+
+
+#include<stdio.h>
+#include<stdlib.h>
+struct stack{
+    int data;
+    struct stack* link;
+};
+struct stack* push(struct stack* head){
+    printf("enter the number of element : ");
+    int n;
+    scanf("%d",&n);
+    struct stack* pre=(struct stack*)malloc(sizeof(struct stack));
+    for(int i=0;i<n;i++){
+        struct stack* newnode=(struct stack*)malloc(sizeof(struct stack));
+        if(newnode==NULL){
+            printf("OVERFLOW");
+            break;
+        }
+
+        printf("enter the number of element : ");
+        int data;
+        scanf("%d",&data);
+        if(head==NULL){
+            newnode->data=data;
+            head=newnode;
+            newnode->link=NULL;
+        }
+        else{
+            newnode->data=data;
+            newnode->link=NULL;
+            pre->link=newnode;
+        }
+        pre=newnode;
+    }
+    return head;
+}
+
+struct stack* pop(struct stack* head) {
+    if (head == NULL){
+        printf("UNDERFLOW");
+        return head;
+    }
+    if ((head)->link == NULL) {
+        free(head);
+        head = NULL;
+        return head;
+    }
+    struct stack* temp = head;
+    while (temp->link->link!= NULL) {
+        temp = temp->link;
+    }
+    free(temp->link);
+    temp->link = NULL;
+    return head;
+}
+
+void top(struct stack **head){
+    struct stack* prev = NULL;
+    struct stack* ptr = *head;
+    struct stack* next = NULL;
+
+    while (ptr != NULL) {
+        next = ptr->link;
+        ptr->link = prev;
+        prev = ptr;
+        ptr= next;
+    }
+    *head = prev;
+    struct stack* temp=*head;
+    while(temp!=NULL){
+        printf("%d ",temp->data);
+        temp=temp->link;
+    }
+}
+
+int main(){
+    struct stack* head=NULL;
+    head=push(head);
+    head=pop(head);
+    top(&head);
+    return 0;
+}
+
