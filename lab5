@@ -1,0 +1,215 @@
+//Ques 1:Insertion in a Circular Linked List (Front, End, and Any Index).
+
+Code:
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node *link;
+};
+struct node* insert_node(struct node* head,int data){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    if(head==NULL){
+        head=newnode;
+        newnode->data=data;
+        newnode->link=head;
+    }
+    else{
+        struct node* ptr=head;
+        while(ptr->link!=head){
+            ptr=ptr->link;
+        }
+        newnode->data=data;
+        ptr->link=newnode;
+        newnode->link=head;
+    }
+    return head;
+}
+
+struct node* insert_front(struct node* head,int data){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->link=head;
+    struct node* ptr=head;
+    while(ptr->link !=head){
+        ptr=ptr->link;
+    }
+    ptr->link=newnode;
+    head=newnode;
+    return head;
+}
+
+struct node* insert_end(struct node* head,int data){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    struct node* ptr=head;
+    if(ptr==NULL) insert_front(head,data);
+    while(ptr->link !=head){
+        ptr=ptr->link;
+    }
+    ptr->link=newnode;
+    newnode->link=head;
+    return head;
+}
+
+struct node* insert_mid(struct node* head,int data,int pos){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    struct node* ptr=head;
+    for(int i=1;i<(pos-1);i++){
+        ptr=ptr->link;
+    }
+    newnode->link=ptr->link;
+    ptr->link=newnode;
+    return head;
+}
+
+void pr_value(struct node *head){
+    struct node* ptr=head;
+    do{
+        printf("%d-> ",ptr->data);
+        ptr=ptr->link;
+    }while(ptr!=head);
+    printf("head");
+}
+
+int main(){
+    struct node * head=NULL;
+    head=insert_node(head,6);
+    head=insert_node(head,7);
+    head=insert_node(head,8);
+    head=insert_node(head,9);
+    head=insert_node(head,10);
+    head=insert_node(head,11);
+    pr_value(head);
+    printf("\n\n");
+
+    // front insert
+    int data;
+    printf("enter the data u want to insert at front  :");
+    scanf("%d",&data);
+    head=insert_front(head,data);
+    pr_value(head);
+    printf("\n\n");
+
+    //end insert
+    int data1;
+    printf("enter the data u want to insert at end  :");
+    scanf("%d",&data1);
+    head=insert_end(head,data1);
+    pr_value(head);
+    printf("\n\n");
+
+    // at any index
+    int data2;
+    printf("enter the data u want to insert at index :");
+    scanf("%d",&data2);
+    int pos;
+    printf("enter the index u want to insert :");
+    scanf("%d",&pos);
+    head=insert_mid(head,data2,pos);
+    pr_value(head);
+    printf("\n\n");
+
+}
+
+
+//Ques 2:Deletion in a Circular Linked List (Front, End, and Any Index).
+
+Code:
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node *link;
+};
+struct node* insert_node(struct node* head,int data){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    if(head==NULL){
+        head=newnode;
+        newnode->data=data;
+        newnode->link=head;
+    }
+    else{
+        struct node* ptr=head;
+        while(ptr->link!=head){
+            ptr=ptr->link;
+        }
+        newnode->data=data;
+        ptr->link=newnode;
+        newnode->link=head;
+    }
+    return head;
+}
+
+struct node* del_front(struct node* head){
+    struct node* ptr=head;
+    while(ptr->link !=head){
+        ptr=ptr->link;
+    }
+    ptr->link=head->link;
+    free(head);
+    head=ptr->link;
+    return head;
+}
+
+struct node* del_end(struct node* head){
+    struct node* ptr=head;
+    while(ptr->link->link !=head){
+        ptr=ptr->link;
+    }
+    free(ptr->link);
+    ptr->link=head;
+    return head;
+}
+struct node* del_index(struct node*head,int pos){
+    struct node* ptr=head;
+    for(int i=1;i<(pos-1);i++){
+        ptr=ptr->link;
+    }
+    if(pos==1) return del_front(head);
+    struct node* temp=ptr->link;
+    ptr->link=temp->link;
+    free(temp);
+    return head;
+}
+
+void pr_value(struct node *head){
+    struct node* ptr=head;
+    do{
+        printf("%d-> ",ptr->data);
+        ptr=ptr->link;
+    }while(ptr!=head);
+    printf("head");
+}
+
+int main(){
+    struct node * head=NULL;
+    head=insert_node(head,6);
+    head=insert_node(head,7);
+    head=insert_node(head,8);
+    head=insert_node(head,9);
+    head=insert_node(head,10);
+    head=insert_node(head,11);
+    pr_value(head);
+    printf("\n\n");
+
+    //del front
+    head=del_front(head);
+    pr_value(head);
+    printf("\n\n");
+
+    //del end
+    head=del_end(head);
+    pr_value(head);
+    printf("\n\n");
+
+    //del at any index
+    int pos;
+    printf("enter the index u want to insert :");
+    scanf("%d",&pos);
+    head=del_index(head,pos);
+    pr_value(head);
+    printf("\n\n");
+
+}
