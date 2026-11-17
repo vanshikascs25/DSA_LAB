@@ -1,0 +1,264 @@
+//Ques 1: Write a program to check if a binary tree is symmetric or not i.e. it is a mirror image.
+
+#include<stdio.h>
+int check_mirror(int arr[],int n,int l,int r){
+    l=2*l+1;
+    r=2*r+2;
+    int lr=0;
+    int rl=0;
+    for(int i=0;i<((n/2)-1);i++){
+        if(arr[l]==arr[r]){
+            if(i%2==1){
+                l=2*lr+2;
+                r=2*rl+1;
+            }
+            else{
+                lr=l;
+                l=2*l+1;
+                rl=r;
+                r=2*r+2;
+            }
+        }
+        else return 0;
+    }
+    return 1;
+}
+int main(){
+    int arr[7]={1,2,2,3,4,4,3};
+    int res=check_mirror(arr,6,0,0);
+    if(res==1) {
+        printf("Tree have mirror property");
+        return 0;
+    }
+    printf("Tree have no mirror property");
+    return 0;
+}
+
+//Ques2: Write a program to check the minimum depth of a binary tree.
+
+
+
+#include<stdio.h>
+int min_depth(int arr[],int n,int l,int r){
+    l=2*l+1;
+    r=2*r+2;
+    int lr=0;
+    int rl=0;
+    for(int i=0;i<((n/2)-1);i++){
+        if(arr[l]==-1) return l;
+        else if(arr[r]==-1) return r;
+        else{
+            if(i%2==1){
+                l=2*lr+2;
+                r=2*rl+1;
+            }
+            else{
+                lr=l;
+                l=2*l+1;
+                rl=r;
+                r=2*r+2;
+            }
+        }
+    }
+}
+int main(){
+    int arr[100]={1,2,2,3,-1,4,5,8,-1};
+    int res=min_depth(arr,6,0,0);
+    printf("minimum depth: %d",res);
+    return 0;
+}
+
+
+//Ques3: Write a program to find the position of kth smallest and kth largest element in BST.
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int val;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* createNode(int value){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->val=value;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+
+void bst(int value,struct node* root){
+    struct node* newnode=createNode(value);
+    if(value<=root->val){
+        if(root->left==NULL){
+            root->left=newnode;
+        }
+        else{
+            bst(value,root->left);
+        }
+    }
+    else{
+        if(root->right==NULL){
+            root->right=newnode;
+        }
+        else{
+            bst(value,root->right);
+        }
+    }
+}
+
+void inorder(struct node* root,int arr[],int *index){
+    if(root!=NULL){
+        inorder(root->left,arr,index);
+
+        arr[*index]=root->val;
+        (*index)++;
+
+        inorder(root->right,arr,index);
+    }
+}
+int main(){
+    int n;
+    printf("Enter number of nodes: ");
+    scanf("%d",&n);
+    int arr[n];
+    printf("Enter values: ");
+    for(int i=0;i<n;i++){
+        scanf("%d",&arr[i]);
+    }
+    struct node* root=createNode(arr[0]);
+    for(int i=1;i<n;i++){
+        bst(arr[i],root);
+    }
+    int inorderArr[n];
+    int index=0;
+    inorder(root,inorderArr,&index);
+
+    printf("Inorder Traversal: ");
+
+    for(int i=0;i<n;i++){
+        printf("%d ",inorderArr[i]);
+    }
+    int k;
+    printf("\nEnter k: ");
+    scanf("%d",&k);
+    if(k>0 && k<=n){
+        printf("Kth Smallest Element = %d",inorderArr[k-1]);
+        printf("\nPosition = %d",k);
+        printf("\nKth Largest Element = %d",inorderArr[n-k]);
+        printf("\nPosition = %d",n-k+1);
+    }
+    else{
+        printf("Invalid value of k");
+    }
+    return 0;
+}
+
+//Ques 4: Write a program for implementation of merge sort on an array.
+
+Program Code:
+
+#include <stdio.h>
+
+void merge(int arr[], int l, int m, int r) {
+    int i = l, j = m + 1, k = 0;
+    int temp[r - l + 1];
+    while (i <= m && j <= r) {
+        if (arr[i] < arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+        }
+    }
+    while (i <= m) {
+        temp[k++] = arr[i++];
+    }
+    while (j <= r) {
+        temp[k++] = arr[j++];
+    }
+    for (int idx = 0; idx < k; idx++) {
+        arr[l + idx] = temp[idx];
+    }
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = (l + r) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter array elements: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+    mergeSort(arr, 0, n - 1);
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}
+
+
+//Ques 5: Write a program for implementation of quick sort on an array.
+
+
+
+Program Code:
+
+#include <stdio.h>
+void swap(int* a, int* b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter array elements: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+    quickSort(arr, 0, n - 1);
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    return 0;
+}
+
