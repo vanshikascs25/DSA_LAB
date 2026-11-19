@@ -1,0 +1,287 @@
+//Ques 1:Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+#include<stdio.h>
+#include <stdlib.h>
+struct node{
+    int val;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* createnode(int v){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->val=v;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+
+struct node* tree(struct node* root){
+    int v;
+    printf("enter node value:");
+    scanf("%d",&v);
+    if(v==-1) return NULL ;
+    struct node* nw=createnode(v);
+    root=nw;
+    printf("enter the left child");
+    nw->left=tree(root);
+    printf("enter the right child");
+    nw->right=tree(root);
+    return root;  
+}
+int mirror_check(struct node *a, struct node *b){
+    if(a == NULL && b == NULL)
+        return 1;
+    if(a == NULL || b == NULL)
+        return 0;
+    if(a->val != b->val)
+        return 0;
+    return mirror_check(a->left, b->right) &&
+           mirror_check(a->right, b->left);
+}
+
+int Sym(struct node *root){
+    if(root == NULL)
+        return 1;
+    return mirror_check(root->left, root->right);
+}
+
+int main(){
+    struct node *root = create_tree();
+    if(sym(root))
+        printf("tree is symmetric");
+    else
+        printf("tree is not symmetric");
+    return 0;
+}
+
+
+/*Ques 2:Given a binary tree, find its minimum depth. The minimum depth is the number of nodes along the shortest path 
+from the root node down to the nearest leaf node. Note: A leaf is a node with no children.*/
+
+#include<stdio.h>
+#include <stdlib.h>
+struct node{
+    int val;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* createnode(int v){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->val=v;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+
+struct node* tree(struct node* root){
+    int v;
+    printf("enter node value:");
+    scanf("%d",&v);
+    if(v==-1) return NULL ;
+    struct node* nw=createnode(v);
+    root=nw;
+    printf("enter the left child");
+    nw->left=tree(root);
+    printf("enter the right child");
+    nw->right=tree(root);
+    return root;  
+}
+
+int minDepth(struct node* root){
+    if(root == NULL)
+        return 0;
+
+    if(root->left == NULL)
+        return 1 + minDepth(root->right);
+
+    if(root->right == NULL)
+        return 1 + minDepth(root->left);
+
+    int left = minDepth(root->left);
+    int right = minDepth(root->right);
+    return 1 + (left < right ? left : right);
+}
+
+int main(){
+    struct node* root=tree(NULL);
+    printf("The minimum depth :%d",minDepth(root));
+}
+
+//Ques 3:Given the root of a binary search tree, and an integer k, return the kth smallest and largest of all the values of the nodes in the tree.
+
+
+#include<stdio.h>
+#include <stdlib.h>
+struct node{
+    int val;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* createnode(int v){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->val=v;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+
+int q[100];
+int top=0;
+struct node* tree(struct node* root,int v){
+    struct node* nw=createnode(v);
+    if(root==NULL)  root=nw;
+    else if(root->val>v) root->left=tree(root->left,v);
+    else if(root->val<=v) root->right=tree(root->right,v);
+    return root;  
+}
+
+void travel(struct node* root,int q[],int n,int *i){
+    if(root==NULL)return;
+    travel(root->left,q,n,i);
+    q[*i]=root->val;
+    (*i)++;
+    travel(root->right,q,n,i);
+}
+
+int main(){
+    struct node* root=tree(NULL,6);
+    root=tree(root,5);
+    root=tree(root,12);
+    root=tree(root,7);
+    root=tree(root,8);
+    root=tree(root,1);
+    root=tree(root,2);
+    root=tree(root,3);
+    root=tree(root,15);
+    travel(root,q,100,&top);
+    int target=3;
+    for(int i=0;i<top;i++){
+        if(i==(target-1)) printf("min node: %d ",q[i]);
+        if(i==(top-(target))) printf("max node: %d ",q[i]);
+    }
+    return 0;
+}
+
+//Ques 4:You are given with n integer unsorted . You need to sort them using tree. Write the comparison of it wrt Quick Sort and Merge Sort.
+
+
+#include<stdio.h>
+#include <stdlib.h>
+struct node{
+    int val;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* createnode(int v){
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->val=v;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+
+int q[100];
+int top=0;
+struct node* tree(struct node* root,int v){
+    struct node* nw=createnode(v);
+    if(root==NULL)  root=nw;
+    else if(root->val>v) root->left=tree(root->left,v);
+    else if(root->val<=v) root->right=tree(root->right,v);
+    return root;  
+}
+
+void travel(struct node* root,int q[],int n,int *i){
+    if(root==NULL)return;
+    travel(root->left,q,n,i);
+    q[*i]=root->val;
+    (*i)++;
+    travel(root->right,q,n,i);
+}
+
+
+//merge sort
+void merge(int arr[], int low, int mid, int high){
+    int temp[100];
+    int i = low;
+    int j = mid + 1;
+    int k = low;
+    while(i <= mid && j <= high){
+        if(arr[i] <= arr[j])
+            temp[k++] = arr[i++];
+        else
+            temp[k++] = arr[j++];
+    }
+    while(i <= mid)
+        temp[k++] = arr[i++];
+    while(j <= high)
+        temp[k++] = arr[j++];
+    for(i = low; i <= high; i++)
+        arr[i] = temp[i];
+}
+void mergesort(int arr[], int low, int high){
+    if(low < high){
+        int mid = (low + high) / 2;
+        mergesort(arr, low, mid);
+        mergesort(arr, mid + 1, high);
+        merge(arr, low, mid, high);
+    }
+}
+
+//quick sort
+int partition(int arr[], int low, int high){
+    int pivot = arr[high];
+    int i = low - 1;
+    for(int j = low; j < high; j++){
+        if(arr[j] < pivot){
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+void quicksort(int arr[], int low, int high){
+    if(low < high){
+        int p = partition(arr, low, high);
+        quicksort(arr, low, p - 1);
+        quicksort(arr, p + 1, high);
+    }
+}
+
+
+int main(){
+    int arr[6]={6,4,8,1,9,2};
+    struct node* root=NULL;
+    for(int i=0;i<6;i++){
+        root=tree(root,arr[i]);
+    }
+    travel(root,q,100,&top);
+    for(int i=0;i<top;i++){
+        printf(" %d ",q[i]);
+    }
+
+    //merge sort 
+    int arr1[6]={16,14,18,11,19,12};
+    mergesort(arr, 0, 5);
+    for(int i=0;i<top;i++){
+        printf(" %d ",arr1[i]);
+    }
+
+    //quick sort
+    int arr2[6]={26,24,28,21,29,22};
+    quicksort(arr, 0, 5);
+    for(int i=0;i<top;i++){
+        printf(" %d ",arr2[i]);
+    }
+
+    return 0;
+}
